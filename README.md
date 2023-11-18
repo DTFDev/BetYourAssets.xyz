@@ -4,7 +4,7 @@ Decentralizing the world of betting with blockchain technology. Bet using ETH, E
 
 
 /*
-  Copyright [2023] [DTFDev]
+  Copyright [2023] [BetYourAssets]
 
   All rights reserved. This code and its accompanying files may not be used, copied, modified, merged, published, distributed, sublicensed, or sold, in whole or in part, without the express written permission of the copyright holder.
 
