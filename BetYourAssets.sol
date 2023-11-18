@@ -330,6 +330,64 @@ contract BetYourAssets {
         emit BetJoined(betId, msg.sender);
     }
 
+    //  Public View Functions
+
+    // Function to get any bet details 
+    function getBetDetails(uint256 betId) public view returns (string memory title, address creator, uint256 betAmount, address middleMan, address payable[] memory participants, BetStatus status, BetType betType, uint256 timeout, bool paused, address tokenAddress) {
+        require(betId < betCount, "Invalid bet ID");
+
+        Bet storage bet = bets[betId];
+        return (bet.title, bet.participants[0], bet.betAmount, bet.middleMan, bet.participants, bet.status, bet.betType, bet.timeout, bet.paused, bet.tokenAddress);
+    }
+
+    // Function to get the bet status 
+    function getBetStatus(uint256 betId) public view returns (BetStatus) {
+        require(betId < betCount, "Invalid bet ID");
+
+        Bet storage bet = bets[betId];
+        return bet.status;
+    }
+    // Function to get total bets 
+    function getBetCount() public view returns (uint256) {
+        return betCount;
+    }
+
+    // Function to check if a user is a participant of the bet  
+    function hasAddressJoinedBet(uint256 betId, address participant) public view returns (bool) {
+        require(betId < betCount, "Invalid bet ID");
+        return hasJoined[betId][participant];
+    }
+
+    // Function to see every bet user has participated in 
+    function getBetHistory(address user) public view returns (uint[] memory) {
+        uint[] memory userBetHistory = new uint[](betCount);
+        uint counter = 0;
+    
+        for (uint i = 0; i < betCount; i++) {
+                if (hasJoined[i][user] || bets[i].participants[0] == user) {
+                userBetHistory[counter] = i;
+                counter++;
+        }
+    }
+        // Trim the array to the correct size
+        uint[] memory result = new uint[](counter);
+        for (uint j = 0; j < counter; j++) {
+        result[j] = userBetHistory[j];
+    }
+    
+    return result;
+    }
+
+    // Function to see total eth wagered
+    function getTotalWagered() public view returns (uint) {
+        uint totalWagered;
+        
+        for (uint i = 0; i < betCount; i++) {
+            totalWagered += bets[i].betAmount;
+        }
+        return totalWagered;
+    }
+
     // Resolving Logic
 
     // Function to resolve a bet
